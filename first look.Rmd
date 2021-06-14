@@ -1,0 +1,28 @@
+---
+title: "earthquakes"
+output: pdf_document
+---
+
+# Earthquake Data from USGS
+
+```{r}
+library(tidyverse)
+library(sf)
+library(tmap)
+earthquakes <- read_csv("earthquakes.csv")
+glimpse(earthquakes)
+```
+
+```{r}
+earthquakes <- select(earthquakes, latitude, longitude) %>% 
+  as.matrix() %>% 
+  st_multipoint() %>%
+  st_sfc(crs = "+proj=longlat +datum=WGS84 +nodefs") %>%
+  st_sf(earthquakes)
+```
+
+```{r}
+tm_shape(earthquakes)+
+  tm_dots("depth")
+```
+
