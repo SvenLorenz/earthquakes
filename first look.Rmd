@@ -14,15 +14,20 @@ glimpse(earthquakes)
 ```
 
 ```{r}
-earthquakes <- select(earthquakes, latitude, longitude) %>% 
-  as.matrix() %>% 
-  st_multipoint() %>%
-  st_sfc(crs = "+proj=longlat +datum=WGS84 +nodefs") %>%
-  st_sf(earthquakes)
+earthquakes <- st_as_sf(earthquakes, coords = c("longitude", "latitude"))
 ```
 
 ```{r}
 tm_shape(earthquakes)+
-  tm_dots("depth")
+  tm_dots("depth") +
+  tm_shape(rworldmap::coastsCoarse) +
+  tm_lines()
+```
+
+```{r}
+tm_shape(earthquakes) +
+  tm_dots("mag", size = .1, alpha = .2, border.col = "black") +
+  tm_shape(rworldmap::coastsCoarse) +
+  tm_lines()
 ```
 
